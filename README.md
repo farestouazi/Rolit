@@ -1,111 +1,94 @@
-# fares-rolit
-Rolit, an ancient table game brought back to life in a new form
----------------------------------------------------------------
-##################################################################
+# Rolit
 
-This file was generated on 15/05/2025 by FARES TOUAZI.  
-This file contains instructions to help you install and run ROLIT.
+[Français](README.fr.md) | **English**
 
-##################################################################
+Python implementation of the board game **Rolit** (an Othello-like game for 1 to 4 players),
+with a graphical interface built on `fltk` and automatic game saving.
 
------------------------  
-GENERAL INFORMATION  
------------------------  
-1. Title: Rolit  
+> Originally an AP1 project — Université Gustave Eiffel, 2024-2025
+> Author: TOUAZI FARES
 
-2. Author  
-   Name: Touazi Fares  
-   Email address: touazifaresjr1@gmail.com  
+## Rules
 
--------  
-LICENSE  
--------  
-1. License:  
-   Apache License 2.0 ( please open LICENSE.txt to see more details about project's license )
+- The board is an 8×8 grid; the game starts with four balls in the centre.
+- On your turn, place a ball on an **empty square adjacent** (8 directions) to an existing ball.
+- Every ball lined up (row, column or diagonal) between the ball you placed and another ball
+  **of your own colour** is converted to your colour.
+- A round ends when the board is full: each player scores one point per ball of their colour.
+- The game ends when a player reaches the chosen point limit.
 
-----------  
-PREREQUISITES  
-----------  
-Before you begin, make sure your computer meets the following requirements:  
+Modes: 2, 3 or 4 local players, or 1 player against the CPU (random moves).
 
-1. Python 3.0 or higher** is installed.  
-   - If not, you can download it here: https://www.python.org/downloads/  
-2. Required Python libraries:  
-   - random, copy, time, json, pyautogui  
-   - the fltk library will be imported from the fltk.py file that you need to download from [here](https://antoinemeyer.frama.io/fltk/index.html).
+## Installation
 
-------------  
-INSTALLATION  
-------------  
-1. **Extracting files**:  
-   - Unzip the downloaded archive into a folder of your choice.  
-   - You can use tools like:  
-     - On Windows: Right-click on the archive and select "Extract All".  
-     - On macOS/Linux: Use the built-in extraction tool or the following command in a terminal:  
-       ```  
-       unzip rolit.zip  
-       ```  
+Python 3.9 or later.
 
-2. **Accessing the folder**:
-   - Open a terminal or command prompt and navigate to the extracted folder:
-     ```
-     cd rolit
-     ```
+```bash
+pip install -r requirements.txt
+```
 
--------------------
-FILE OVERVIEW
--------------------
-1. List of downloaded files:
+The graphical module **`fltk.py`** is not included in this repository (it belongs to its
+own authors and is not ours to redistribute). Download it from the
+[original source](https://fltk-b9f35a.frama.io/) and put it at the project root, next to `main.py`.
 
-   A. rolit.zip
-      Description: Zipped folder containing the game files
+## Run
 
-   B. README.txt (this file)
-      Description: user guide
+```bash
+python main.py
+```
 
-   C. LICENSE.txt
-      Description: project license
+| Action | Control |
+|---|---|
+| Place a ball | left-click a playable square, then left-click to confirm |
+| Undo the move | right-click (before confirming) |
+| Pause / save and quit | button in the top-left corner |
 
+The game is saved after every move (`save_game.json`) and can be resumed from the main menu.
+Settings (language, font, theme, appearance) are stored in `config.json`.
+Both files are ignored by Git. The interface is in English by default; the language can be
+changed in the settings (French, English, Spanish, Italian, German).
 
-2. List of files compressed in rolit.zip:
+## Project structure
 
-   A. rolit.py
-      Description: main script of the game
+```
+main.py                    entry point
+fltk.py                    graphics library (provided separately, not in the repo)
+rolit/
+├── app.py                 navigation between screens
+├── regles.py              game rules (pure logic, testable)
+├── partie.py              game data model
+├── sauvegarde.py          JSON save / load
+├── parametres.py          persistent user settings
+├── traductions.py         UI texts in 5 languages
+├── constantes.py          global constants
+├── affichage.py           window size, fraction -> pixel conversion
+├── ui/
+│   ├── theme.py           light/dark themes and ball palette
+│   ├── widgets.py         clickable zones, buttons, radio buttons
+│   ├── formes.py          ball drawing (round, square, triangle, star)
+│   └── plateau.py         board decor, balls, scores, turn indicators
+└── ecrans/
+    ├── menu_principal.py
+    ├── options.py
+    ├── preparation.py     player count, point limit, names, colours
+    ├── jeu.py             round / game flow
+    └── dialogues.py       pause, end of round, end of game
+tests/                     unit tests (rules, game, saving)
+```
 
-   B. rolit_icon.ico
-      Description: icon of the ROLIT game
-  
-   C. LICENSE.txt
-      Description: copy of the project license file
+`rolit/regles.py`, `partie.py` and `sauvegarde.py` do not depend on `fltk`, so they can be tested
+without a display. (Module and identifier names are in French, as in the original project.)
 
+## Tests
 
-## IMPORTANT !!! :
-### - fltk.py file must be copied to the rolit folder after decompression.
+```bash
+python -m unittest discover -s tests -t . -v
+```
 
+## License
 
-4. New files may appear in the extraction folder after running the rolit.py script:
+Released under the [MIT License](LICENSE). This does not cover `fltk.py`, which belongs to its own authors.
 
-   A. config.json
-      Description: configuration file
+## Acknowledgements
 
-   B. save_game.json
-      Description: save file (management)
-
--------------
-RUNNING THE GAME
--------------
-1. In the terminal or command prompt, run the main script of the game:
-    ```
-    python rolit.py
-    ```
-
-----------
-SUPPORT
-----------
-If you encounter problems or have questions:
-
-- Check that Python is properly installed by typing ```python --version``` in a terminal.
-- Ensure that all dependencies are installed.
-- Contact me at [ touazifaresjr1@gmail.com ] for assistance.
-
-THANK YOU FOR TRYING ROLIT!
+Graphics are powered by `fltk.py` ([source](https://fltk-b9f35a.frama.io/)), © its original authors.

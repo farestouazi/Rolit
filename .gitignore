@@ -1,0 +1,12 @@
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.idea/
+.vscode/
+.DS_Store
+fltk.py
+
+config.json
+save_game.json
+save_game.json.tmp
